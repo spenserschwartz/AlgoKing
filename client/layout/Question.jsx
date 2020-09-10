@@ -6,7 +6,7 @@ import Top from "./questionComps/Top.jsx";
 import NavBar from "./NavBar.jsx";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 // material ui imports
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -23,16 +23,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Question = () => {
+const Question = (query) => {
   const classes = useStyles();
+
+  console.log("we are querying", query);
 
   const [questionData, setQuestionData] = useState({
     input: "",
     output: "",
-    seconds: 0,
-    question: '',
-    tests: '',
+    question: "",
+    tests: "",
+    todayQuestion: {},
   });
+
+  const [time, setTime] = useState({
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    getData();
+  }, []);
+  // set the data
+  const getData = async () => {
+    const res = await axios.get(`/api/challenges`);
+    setQuestionData({ ...questionData, todayQuestion: res.data });
+  };
 
   // make the axios request to get the question and all the tests
 
@@ -42,13 +57,9 @@ const Question = () => {
         <Grid item xs={4}>
           <Paper className={classes.paper}>
             <Link to="/home"> Give up and go home</Link>
-            <Top
-              className="top"
-              quetionData={questionData}
-              setQuestionData={setQuestionData}
-            />
+            <Top className="top" time={time} setTime={setTime} />
             <Prompt className="prompt" />
-            <Results className="results" />
+            <Results className="results" questionData={questionData} />
           </Paper>
         </Grid>
         <Grid item xs={8}>
@@ -56,6 +67,7 @@ const Question = () => {
             <CodeWindow
               setQuestionData={setQuestionData}
               questionData={questionData}
+              time={time}
             />
           </Paper>
         </Grid>

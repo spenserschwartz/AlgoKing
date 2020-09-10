@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 // https://upmostly.com/tutorials/build-a-react-timer-component-using-hooks
 
@@ -7,9 +7,10 @@ const Timer = (props) => {
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(true);
 
+  // Toggle the mouse from ON to OFF or vice versa
   function toggle() {
     setIsActive(!isActive);
-    console.log("This is seconds: ", seconds);
+    console.log('This is seconds: ', seconds);
   }
 
   function reset() {
